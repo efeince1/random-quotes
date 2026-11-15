@@ -2,30 +2,47 @@
 
 import { quotes as initialQuotes } from '@/quotes';
 import { Button } from '@/components/Button';
+import { QuoteCard } from '@/components/QuoteCard';
 import { useState } from 'react';
-import { H3 } from '@/components/typography/H3';
 
 export default function Home() {
+  const [quotes, setQuotes] = useState(initialQuotes);
   const [quoteIndex, setQuoteIndex] = useState(0);
-  const { quote, author } = initialQuotes[quoteIndex];
+  const { quote, author, likeCount } = quotes[quoteIndex];
 
-  function handleClick() {
-    setQuoteIndex(quoteIndex + 1);
+  function handleNext() {
+  setQuoteIndex((quoteIndex + 1) % quotes.length);
+}
+
+function handlePrevious() {
+  setQuoteIndex((quoteIndex - 1 + quotes.length) % quotes.length);
+}
+
+  function handleLike() {
+    setQuotes(
+      quotes.map((q, index) =>
+        index === quoteIndex ? { ...q, likeCount: q.likeCount + 1 } : q
+      )
+    );
   }
 
   return (
     <main className='min-h-screen flex items-center justify-center bg-slate-200'>
-      <section className='bg-slate-50/50 rounded-md p-10 flex flex-col'>
-        <H3 element='p'>{quote}</H3>
-        <span className='text-md font-semibold text-slate-900 self-end'>
-          - {author}
-        </span>
-        <div className='mt-6 flex flex-col'>
-          <Button variant={'primary'} onClick={handleClick}>
-            Next Quote
-          </Button>
-        </div>
-      </section>
+      <QuoteCard
+  quote={quote}
+  author={author}
+  likeCount={likeCount}
+  onLike={handleLike}
+>
+  <div className='flex gap-3'>
+    <Button variant='secondary' onClick={handlePrevious}>
+      Previous
+    </Button>
+    <Button variant='primary' onClick={handleNext}>
+      Next Quote
+    </Button>
+  </div>
+</QuoteCard>
     </main>
   );
 }
