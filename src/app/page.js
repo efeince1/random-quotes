@@ -10,9 +10,13 @@ export default function Home() {
   const [quoteIndex, setQuoteIndex] = useState(0);
   const { quote, author, likeCount } = quotes[quoteIndex];
 
-  function handleClick() {
-    setQuoteIndex((quoteIndex + 1) % quotes.length);
-  }
+  function handleNext() {
+  setQuoteIndex((quoteIndex + 1) % quotes.length);
+}
+
+function handlePrevious() {
+  setQuoteIndex((quoteIndex - 1 + quotes.length) % quotes.length);
+}
 
   function handleLike() {
     setQuotes(
@@ -25,15 +29,20 @@ export default function Home() {
   return (
     <main className='min-h-screen flex items-center justify-center bg-slate-200'>
       <QuoteCard
-        quote={quote}
-        author={author}
-        likeCount={likeCount}
-        onLike={handleLike}
-      >
-        <Button variant={'primary'} onClick={handleClick}>
-          Next Quote
-        </Button>
-      </QuoteCard>
+  quote={quote}
+  author={author}
+  likeCount={likeCount}
+  onLike={handleLike}
+>
+  <div className='flex gap-3'>
+    <Button variant='secondary' onClick={handlePrevious}>
+      Previous
+    </Button>
+    <Button variant='primary' onClick={handleNext}>
+      Next Quote
+    </Button>
+  </div>
+</QuoteCard>
     </main>
   );
 }

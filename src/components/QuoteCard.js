@@ -3,7 +3,7 @@ import { Button } from '@/components/Button';
 
 export function QuoteCard({ quote, author, likeCount, onLike, children }) {
   return (
-    <section className='bg-slate-50/50 rounded-md p-10 flex flex-col'>
+    <section className='bg-white shadow-md rounded-md p-10 flex flex-col'>
       <H3 element='p'>{quote}</H3>
       <span className='text-md font-semibold text-slate-900 self-end'>
         - {author}
