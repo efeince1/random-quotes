@@ -1,5 +1,6 @@
 import { H3 } from '@/components/typography/H3';
 import { Button } from '@/components/Button';
+import { Heart } from 'lucide-react';
 
 export function QuoteCard({ quote, author, likeCount, onLike, children }) {
   return (
@@ -10,8 +11,9 @@ export function QuoteCard({ quote, author, likeCount, onLike, children }) {
       </span>
       <div className='mt-4 flex items-center gap-3'>
         <Button variant='secondary' onClick={onLike}>
-          Like
-        </Button>
+  <Heart size={18} className={likeCount > 0 ? 'fill-current' : ''} />
+  Like
+</Button>
         <span className='text-md font-semibold text-slate-900'>
           {likeCount} likes
         </span>
