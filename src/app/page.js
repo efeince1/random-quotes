@@ -2,8 +2,8 @@
 
 import { quotes as initialQuotes } from '@/quotes';
 import { Button } from '@/components/Button';
+import { QuoteCard } from '@/components/QuoteCard';
 import { useState } from 'react';
-import { H3 } from '@/components/typography/H3';
 
 export default function Home() {
   const [quoteIndex, setQuoteIndex] = useState(0);
@@ -15,17 +15,11 @@ export default function Home() {
 
   return (
     <main className='min-h-screen flex items-center justify-center bg-slate-200'>
-      <section className='bg-slate-50/50 rounded-md p-10 flex flex-col'>
-        <H3 element='p'>{quote}</H3>
-        <span className='text-md font-semibold text-slate-900 self-end'>
-          - {author}
-        </span>
-        <div className='mt-6 flex flex-col'>
-          <Button variant={'primary'} onClick={handleClick}>
-            Next Quote
-          </Button>
-        </div>
-      </section>
+      <QuoteCard quote={quote} author={author}>
+        <Button variant={'primary'} onClick={handleClick}>
+          Next Quote
+        </Button>
+      </QuoteCard>
     </main>
   );
 }
