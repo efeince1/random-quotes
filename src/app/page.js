@@ -1,9 +1,9 @@
 'use client';
 
-import { Button } from '@/components/Button';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 import { QuoteCard } from '@/components/QuoteCard';
 import { useQuotes } from '@/app/QuotesContext';
-import Link from 'next/link';
 
 export default function Home() {
   const { quotes, quoteIndex, nextQuote, previousQuote, likeQuote } =
@@ -11,27 +11,27 @@ export default function Home() {
   const { quote, author, likeCount } = quotes[quoteIndex];
 
   return (
-<main className='min-h-screen flex flex-col items-center justify-center gap-6 bg-slate-200'>      <QuoteCard
+    <main className='min-h-screen flex flex-col items-center justify-center gap-6 bg-background p-4'>
+      <h1 className='sr-only'>Random Quotes</h1>
+      <QuoteCard
         quote={quote}
         author={author}
         likeCount={likeCount}
         onLike={() => likeQuote(quoteIndex)}
       >
-        <div className='flex gap-3'>
+        <div className='flex flex-wrap gap-3'>
           <Button variant='secondary' onClick={previousQuote}>
             Previous
           </Button>
-          <Button variant='primary' onClick={nextQuote}>
-            Next Quote
-          </Button>
+          <Button onClick={nextQuote}>Next Quote</Button>
         </div>
       </QuoteCard>
       <Link
-  href='/user/quotes/liked'
-  className='font-semibold text-slate-900 underline'
->
-  View liked quotes
-</Link>
+        href='/user/quotes/liked'
+        className='font-semibold text-foreground underline underline-offset-4'
+      >
+        View liked quotes
+      </Link>
     </main>
   );
 }

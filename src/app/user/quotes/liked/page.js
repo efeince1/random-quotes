@@ -12,11 +12,11 @@ export default function LikedQuotesPage() {
     .filter((q) => q.likeCount > 0);
 
   return (
-    <main className='min-h-screen bg-slate-200 p-10 flex flex-col items-center gap-6'>
-      <h1 className='text-3xl font-semibold text-slate-900'>Liked Quotes</h1>
+    <main className='min-h-screen bg-background p-4 sm:p-10 flex flex-col items-center gap-6'>
+      <h1 className='text-3xl font-semibold text-foreground'>Liked Quotes</h1>
 
       {likedQuotes.length === 0 ? (
-        <p className='text-slate-900'>You have not liked any quotes yet.</p>
+        <p className='text-foreground'>You have not liked any quotes yet.</p>
       ) : (
         <ul className='flex flex-col gap-4 w-full max-w-xl'>
           {likedQuotes.map((q) => (
@@ -31,7 +31,10 @@ export default function LikedQuotesPage() {
         </ul>
       )}
 
-      <Link href='/' className='font-semibold text-slate-900 underline'>
+      <Link
+        href='/'
+        className='font-semibold text-foreground underline underline-offset-4'
+      >
         Back to quotes
       </Link>
     </main>

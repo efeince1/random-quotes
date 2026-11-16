@@ -1,22 +1,27 @@
 import { Heart } from 'lucide-react';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 
 export function LikedQuoteCard({ quote, author, likeCount, onUnlike }) {
   return (
-    <li className='bg-white shadow-md rounded-md p-6 flex flex-col gap-3'>
-      <p className='text-lg font-semibold text-slate-900'>{quote}</p>
-      <span className='text-md font-semibold text-slate-900 self-end'>
-        - {author}
-      </span>
-      <div className='flex items-center gap-3'>
-        <Button variant='secondary' onClick={onUnlike}>
-          <Heart size={18} className='fill-current' />
-          Unlike
-        </Button>
-        <span className='text-md font-semibold text-slate-900'>
-          {likeCount} likes
-        </span>
-      </div>
+    <li>
+      <Card>
+        <CardContent className='flex flex-col gap-3'>
+          <p className='text-lg font-semibold text-foreground'>{quote}</p>
+          <span className='self-end font-semibold text-foreground'>
+            - {author}
+          </span>
+          <div className='flex items-center gap-3'>
+            <Button variant='outline' onClick={onUnlike}>
+              <Heart className='fill-current' />
+              Unlike
+            </Button>
+            <span className='font-semibold text-foreground'>
+              {likeCount} likes
+            </span>
+          </div>
+        </CardContent>
+      </Card>
     </li>
   );
 }
