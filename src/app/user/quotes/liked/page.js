@@ -12,7 +12,7 @@ export default function LikedQuotesPage() {
     .filter((q) => q.likeCount > 0);
 
   return (
-    <main className='min-h-screen bg-background p-4 sm:p-10 flex flex-col items-center gap-6'>
+    <main className='min-h-screen bg-background px-4 pt-20 pb-10 sm:px-10 flex flex-col items-center gap-6'>
       <h1 className='text-3xl font-semibold text-foreground'>Liked Quotes</h1>
 
       {likedQuotes.length === 0 ? (

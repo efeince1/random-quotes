@@ -11,7 +11,7 @@ export default function Home() {
   const { quote, author, likeCount } = quotes[quoteIndex];
 
   return (
-    <main className='min-h-screen flex flex-col items-center justify-center gap-6 bg-background p-4'>
+    <main className='min-h-screen flex flex-col items-center justify-center gap-6 bg-background px-4 py-20'>
       <h1 className='sr-only'>Random Quotes</h1>
       <QuoteCard
         quote={quote}
