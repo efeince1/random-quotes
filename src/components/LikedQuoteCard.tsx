@@ -2,7 +2,19 @@ import { Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
-export function LikedQuoteCard({ quote, author, likeCount, onUnlike }) {
+type LikedQuoteCardProps = {
+  quote: string;
+  author: string;
+  likeCount: number;
+  onUnlike: () => void;
+};
+
+export function LikedQuoteCard({
+  quote,
+  author,
+  likeCount,
+  onUnlike,
+}: LikedQuoteCardProps) {
   return (
     <li>
       <Card>

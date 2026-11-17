@@ -1,4 +1,11 @@
-export function H3({ element, children }) {
+import type { ReactNode } from 'react';
+
+type H3Props = {
+  element?: 'p' | 'span' | 'h3';
+  children: ReactNode;
+};
+
+export function H3({ element = 'h3', children }: H3Props) {
   const styles = 'text-xl sm:text-2xl font-semibold text-foreground';
 
   switch (element) {

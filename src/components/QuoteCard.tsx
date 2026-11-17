@@ -1,9 +1,24 @@
 import { Heart } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { H3 } from '@/components/typography/H3';
 
-export function QuoteCard({ quote, author, likeCount, onLike, children }) {
+type QuoteCardProps = {
+  quote: string;
+  author: string;
+  likeCount: number;
+  onLike: () => void;
+  children: ReactNode;
+};
+
+export function QuoteCard({
+  quote,
+  author,
+  likeCount,
+  onLike,
+  children,
+}: QuoteCardProps) {
   return (
     <Card className='w-full max-w-xl'>
       <CardContent className='flex flex-col gap-4'>
