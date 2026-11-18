@@ -7,10 +7,27 @@ import { QuoteCard } from '@/components/QuoteCard';
 import { useQuotes } from '@/app/QuotesContext';
 
 export default function Home() {
-  const { user } = useUser();
-  const { quotes, quoteIndex, nextQuote, previousQuote, likeQuote } =
-    useQuotes();
+  const { user, isLoading } = useUser();
+  const {
+    quotes,
+    quoteIndex,
+    nextQuote,
+    previousQuote,
+    likeQuote,
+    unlikeQuote,
+  } = useQuotes();
   const { quote, author, likedBy } = quotes[quoteIndex];
+
+  const isLiked = !!user && likedBy.includes(user.sub);
+
+  function handleLike() {
+    if (!user) return;
+    if (isLiked) {
+      unlikeQuote(quoteIndex, user.sub);
+    } else {
+      likeQuote(quoteIndex, user.sub);
+    }
+  }
 
   return (
     <main className='min-h-screen flex flex-col items-center justify-center gap-6 bg-background px-4 py-20'>
@@ -19,9 +36,9 @@ export default function Home() {
         quote={quote}
         author={author}
         likeCount={likedBy.length}
-        onLike={() => {
-          if (user) likeQuote(quoteIndex, user.sub);
-        }}
+        isLiked={isLiked}
+        likeDisabled={!user}
+        onLike={handleLike}
       >
         <div className='flex flex-wrap gap-3'>
           <Button variant='secondary' onClick={previousQuote}>
@@ -30,12 +47,27 @@ export default function Home() {
           <Button onClick={nextQuote}>Next Quote</Button>
         </div>
       </QuoteCard>
-      <Link
-        href='/user/quotes/liked'
-        className='font-semibold text-foreground underline underline-offset-4'
-      >
-        View liked quotes
-      </Link>
+
+      {!isLoading && !user && (
+        <p className='text-foreground'>
+          <a
+            href='/auth/login'
+            className='font-semibold underline underline-offset-4'
+          >
+            Log in
+          </a>{' '}
+          to like quotes.
+        </p>
+      )}
+
+      {user && (
+        <Link
+          href='/user/quotes/liked'
+          className='font-semibold text-foreground underline underline-offset-4'
+        >
+          View liked quotes
+        </Link>
+      )}
     </main>
   );
 }
