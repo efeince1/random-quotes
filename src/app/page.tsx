@@ -1,14 +1,16 @@
 'use client';
 
 import Link from 'next/link';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { Button } from '@/components/ui/button';
 import { QuoteCard } from '@/components/QuoteCard';
 import { useQuotes } from '@/app/QuotesContext';
 
 export default function Home() {
+  const { user } = useUser();
   const { quotes, quoteIndex, nextQuote, previousQuote, likeQuote } =
     useQuotes();
-  const { quote, author, likeCount } = quotes[quoteIndex];
+  const { quote, author, likedBy } = quotes[quoteIndex];
 
   return (
     <main className='min-h-screen flex flex-col items-center justify-center gap-6 bg-background px-4 py-20'>
@@ -16,8 +18,10 @@ export default function Home() {
       <QuoteCard
         quote={quote}
         author={author}
-        likeCount={likeCount}
-        onLike={() => likeQuote(quoteIndex)}
+        likeCount={likedBy.length}
+        onLike={() => {
+          if (user) likeQuote(quoteIndex, user.sub);
+        }}
       >
         <div className='flex flex-wrap gap-3'>
           <Button variant='secondary' onClick={previousQuote}>

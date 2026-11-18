@@ -1,15 +1,17 @@
 'use client';
 
 import Link from 'next/link';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { useQuotes } from '@/app/QuotesContext';
 import { LikedQuoteCard } from '@/components/LikedQuoteCard';
 
 export default function LikedQuotesPage() {
+  const { user } = useUser();
   const { quotes, unlikeQuote } = useQuotes();
 
   const likedQuotes = quotes
     .map((q, index) => ({ ...q, index }))
-    .filter((q) => q.likeCount > 0);
+    .filter((q) => user && q.likedBy.includes(user.sub));
 
   return (
     <main className='min-h-screen bg-background px-4 pt-20 pb-10 sm:px-10 flex flex-col items-center gap-6'>
@@ -24,8 +26,10 @@ export default function LikedQuotesPage() {
               key={q.index}
               quote={q.quote}
               author={q.author}
-              likeCount={q.likeCount}
-              onUnlike={() => unlikeQuote(q.index)}
+              likeCount={q.likedBy.length}
+              onUnlike={() => {
+                if (user) unlikeQuote(q.index, user.sub);
+              }}
             />
           ))}
         </ul>
