@@ -4,7 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { QuotesProvider } from '@/app/QuotesContext';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { ThemeToggle } from '@/components/ThemeToggle';
+import { Navbar } from '@/components/Navbar'; 
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -31,9 +31,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className='min-h-full flex flex-col'>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
           <QuotesProvider>
-            <div className='fixed top-4 right-4 z-10'>
-              <ThemeToggle />
-            </div>
+            <Navbar />
             {children}
           </QuotesProvider>
         </ThemeProvider>

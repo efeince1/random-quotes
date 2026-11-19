@@ -8,6 +8,8 @@ type QuoteCardProps = {
   quote: string;
   author: string;
   likeCount: number;
+  isLiked: boolean;
+  likeDisabled: boolean;
   onLike: () => void;
   children: ReactNode;
 };
@@ -16,6 +18,8 @@ export function QuoteCard({
   quote,
   author,
   likeCount,
+  isLiked,
+  likeDisabled,
   onLike,
   children,
 }: QuoteCardProps) {
@@ -27,8 +31,13 @@ export function QuoteCard({
           - {author}
         </span>
         <div className='flex items-center gap-3'>
-          <Button variant='outline' onClick={onLike}>
-            <Heart className={likeCount > 0 ? 'fill-current' : ''} />
+          <Button
+            variant='outline'
+            onClick={onLike}
+            disabled={likeDisabled}
+            aria-pressed={isLiked}
+          >
+            <Heart className={isLiked ? 'fill-current' : ''} />
             Like
           </Button>
           <span className='font-semibold text-foreground'>

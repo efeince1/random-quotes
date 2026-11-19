@@ -1,15 +1,44 @@
 'use client';
 
 import Link from 'next/link';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { useQuotes } from '@/app/QuotesContext';
 import { LikedQuoteCard } from '@/components/LikedQuoteCard';
 
 export default function LikedQuotesPage() {
+  const { user, isLoading } = useUser();
   const { quotes, unlikeQuote } = useQuotes();
+
+  if (isLoading) {
+    return (
+      <main className='min-h-screen bg-background px-4 pt-20 flex justify-center'>
+        <p className='text-foreground'>Loading...</p>
+      </main>
+    );
+  }
+
+  if (!user) {
+    return (
+      <main className='min-h-screen bg-background px-4 pt-20 flex flex-col items-center gap-4'>
+        <h1 className='text-3xl font-semibold text-foreground'>
+          Liked Quotes
+        </h1>
+        <p className='text-foreground'>
+          Please log in to see the quotes you liked.
+        </p>
+        <a
+          href='/auth/login?returnTo=/user/quotes/liked'
+          className='font-semibold text-foreground underline underline-offset-4'
+        >
+          Log in
+        </a>
+      </main>
+    );
+  }
 
   const likedQuotes = quotes
     .map((q, index) => ({ ...q, index }))
-    .filter((q) => q.likeCount > 0);
+    .filter((q) => q.likedBy.includes(user.sub));
 
   return (
     <main className='min-h-screen bg-background px-4 pt-20 pb-10 sm:px-10 flex flex-col items-center gap-6'>
@@ -24,8 +53,8 @@ export default function LikedQuotesPage() {
               key={q.index}
               quote={q.quote}
               author={q.author}
-              likeCount={q.likeCount}
-              onUnlike={() => unlikeQuote(q.index)}
+              likeCount={q.likedBy.length}
+              onUnlike={() => unlikeQuote(q.index, user.sub)}
             />
           ))}
         </ul>

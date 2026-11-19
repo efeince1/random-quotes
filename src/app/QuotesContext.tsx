@@ -10,8 +10,8 @@ type QuotesContextType = {
   quoteIndex: number;
   nextQuote: () => void;
   previousQuote: () => void;
-  likeQuote: (index: number) => void;
-  unlikeQuote: (index: number) => void;
+  likeQuote: (index: number, userId: string) => void;
+unlikeQuote: (index: number, userId: string) => void;
 };
 
 const QuotesContext = createContext<QuotesContextType | null>(null);
@@ -28,21 +28,25 @@ export function QuotesProvider({ children }: { children: ReactNode }) {
     setQuoteIndex((quoteIndex - 1 + quotes.length) % quotes.length);
   }
 
-  function likeQuote(index: number) {
-    setQuotes(
-      quotes.map((q, i) =>
-        i === index ? { ...q, likeCount: q.likeCount + 1 } : q
-      )
-    );
-  }
+  function likeQuote(index: number, userId: string) {
+  setQuotes(
+    quotes.map((q, i) =>
+      i === index && !q.likedBy.includes(userId)
+        ? { ...q, likedBy: [...q.likedBy, userId] }
+        : q
+    )
+  );
+}
 
-  function unlikeQuote(index: number) {
-    setQuotes(
-      quotes.map((q, i) =>
-        i === index ? { ...q, likeCount: Math.max(0, q.likeCount - 1) } : q
-      )
-    );
-  }
+function unlikeQuote(index: number, userId: string) {
+  setQuotes(
+    quotes.map((q, i) =>
+      i === index
+        ? { ...q, likedBy: q.likedBy.filter((id) => id !== userId) }
+        : q
+    )
+  );
+}
 
   return (
     <QuotesContext.Provider
