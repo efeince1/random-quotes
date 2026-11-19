@@ -10,12 +10,14 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { useUser } from '@auth0/nextjs-auth0/client';
 
 const initialState: AddNewQuoteState = { success: false };
 
 export function NewQuoteForm() {
   const { addQuote } = useQuotes();
   const router = useRouter();
+  const { user, isLoading } = useUser();
 
   async function handleSubmit(
     previousState: AddNewQuoteState,
@@ -38,6 +40,23 @@ export function NewQuoteForm() {
 
   const quoteErrors = state.errors?.fieldErrors.quote;
   const authorErrors = state.errors?.fieldErrors.author;
+  if (isLoading) {
+  return <p className='text-foreground'>Loading...</p>;
+}
+
+if (!user) {
+  return (
+    <div className='flex flex-col items-center gap-4'>
+      <p className='text-foreground'>Please log in to add a new quote.</p>
+      <a
+        href='/auth/login?returnTo=/user/quotes/new'
+        className='font-semibold text-foreground underline underline-offset-4'
+      >
+        Log in
+      </a>
+    </div>
+  );
+}
 
   return (
     <Card className='w-full max-w-xl'>

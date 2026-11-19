@@ -21,10 +21,15 @@ export function Navbar() {
             Random Quotes
           </Link>
           {user && (
-            <Link href='/user/quotes/liked' className={linkStyles}>
-              Liked quotes
-            </Link>
-          )}
+  <>
+    <Link href='/user/quotes/new' className={linkStyles}>
+      New quote
+    </Link>
+    <Link href='/user/quotes/liked' className={linkStyles}>
+      Liked quotes
+    </Link>
+  </>
+)}
         </div>
 
         <div className='flex items-center gap-3'>
