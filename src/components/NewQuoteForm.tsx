@@ -1,16 +1,24 @@
 'use client';
 
-import { useActionState } from 'react';
+import { startTransition, useActionState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { addNewQuote } from '@/app/user/quotes/new/actions';
-import type { AddNewQuoteState } from '@/types/quotes';
 import { useQuotes } from '@/app/QuotesContext';
+import { newQuoteSchema } from '@/types/quotes';
+import type { AddNewQuoteState, NewQuoteInput } from '@/types/quotes';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { useUser } from '@auth0/nextjs-auth0/client';
 
 const initialState: AddNewQuoteState = { success: false };
 
@@ -19,7 +27,7 @@ export function NewQuoteForm() {
   const router = useRouter();
   const { user, isLoading } = useUser();
 
-  async function handleSubmit(
+  async function submitToServer(
     previousState: AddNewQuoteState,
     formData: FormData,
   ) {
@@ -34,76 +42,97 @@ export function NewQuoteForm() {
   }
 
   const [state, formAction, isPending] = useActionState(
-    handleSubmit,
+    submitToServer,
     initialState,
   );
 
-  const quoteErrors = state.errors?.fieldErrors.quote;
-  const authorErrors = state.errors?.fieldErrors.author;
-  if (isLoading) {
-  return <p className='text-foreground'>Loading...</p>;
-}
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<NewQuoteInput>({
+    mode: 'onBlur',
+    resolver: zodResolver(newQuoteSchema),
+    defaultValues: { author: '', quote: '' },
+  });
 
-if (!user) {
-  return (
-    <div className='flex flex-col items-center gap-4'>
-      <p className='text-foreground'>Please log in to add a new quote.</p>
-      <a
-        href='/auth/login?returnTo=/user/quotes/new'
-        className='font-semibold text-foreground underline underline-offset-4'
-      >
-        Log in
-      </a>
-    </div>
-  );
-}
+  function onValid(values: NewQuoteInput) {
+    const formData = new FormData();
+    formData.append('author', values.author);
+    formData.append('quote', values.quote);
+    startTransition(() => formAction(formData));
+  }
+
+  const authorErrors = errors.author
+    ? [errors.author]
+    : state.errors?.fieldErrors.author?.map((message) => ({ message }));
+  const quoteErrors = errors.quote
+    ? [errors.quote]
+    : state.errors?.fieldErrors.quote?.map((message) => ({ message }));
+
+  if (isLoading) {
+    return <p className='text-foreground'>Loading...</p>;
+  }
+
+  if (!user) {
+    return (
+      <div className='flex flex-col items-center gap-4'>
+        <p className='text-foreground'>Please log in to add a new quote.</p>
+        <a
+          href='/auth/login?returnTo=/user/quotes/new'
+          className='font-semibold text-foreground underline underline-offset-4'
+        >
+          Log in
+        </a>
+      </div>
+    );
+  }
 
   return (
     <Card className='w-full max-w-xl'>
       <CardContent>
-        <form action={formAction} className='flex flex-col gap-5' noValidate>
-          {state.message && (
-            <p role='alert' className='text-sm font-semibold text-destructive'>
-              {state.message}
-            </p>
-          )}
-
-          <div className='flex flex-col gap-2'>
-            <Label htmlFor='quote'>Quote</Label>
-            <Textarea
-              id='quote'
-              name='quote'
-              rows={4}
-              defaultValue={state.data?.quote}
-              aria-invalid={!!quoteErrors}
-              aria-describedby={quoteErrors ? 'quote-error' : undefined}
-            />
-            {quoteErrors && (
-              <p id='quote-error' className='text-sm text-destructive'>
-                {quoteErrors.join(' ')}
+        <form onSubmit={handleSubmit(onValid)} noValidate>
+          <FieldGroup>
+            {state.message && (
+              <p
+                role='alert'
+                className='text-sm font-semibold text-destructive'
+              >
+                {state.message}
               </p>
             )}
-          </div>
 
-          <div className='flex flex-col gap-2'>
-            <Label htmlFor='author'>Author</Label>
-            <Input
-              id='author'
-              name='author'
-              defaultValue={state.data?.author}
-              aria-invalid={!!authorErrors}
-              aria-describedby={authorErrors ? 'author-error' : undefined}
-            />
-            {authorErrors && (
-              <p id='author-error' className='text-sm text-destructive'>
-                {authorErrors.join(' ')}
-              </p>
-            )}
-          </div>
+            <Field data-invalid={!!quoteErrors}>
+              <FieldLabel htmlFor='quote'>Quote</FieldLabel>
+              <Textarea
+                id='quote'
+                rows={4}
+                aria-invalid={!!quoteErrors}
+                {...register('quote')}
+              />
+              {quoteErrors && <FieldError errors={quoteErrors} />}
+            </Field>
 
-          <Button type='submit' disabled={isPending}>
-            {isPending ? 'Adding...' : 'Add quote'}
-          </Button>
+            <Field data-invalid={!!authorErrors}>
+              <FieldLabel htmlFor='author'>Author</FieldLabel>
+              <Input
+                id='author'
+                aria-invalid={!!authorErrors}
+                {...register('author')}
+              />
+              {authorErrors && <FieldError errors={authorErrors} />}
+            </Field>
+
+            <Field orientation='horizontal'>
+              <Button type='submit' disabled={isPending}>
+                {isPending ? 'Adding...' : 'Add quote'}
+              </Button>
+              <Button type='button' variant='outline' onClick={() => reset()}>
+                Clear
+              </Button>
+            </Field>
+          </FieldGroup>
         </form>
       </CardContent>
     </Card>
