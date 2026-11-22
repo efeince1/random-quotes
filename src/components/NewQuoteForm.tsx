@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { addNewQuote } from '@/app/user/quotes/new/actions';
 import { useQuotes } from '@/app/QuotesContext';
-import { newQuoteSchema } from '@/types/quotes';
+import { newQuoteSchema,quoteCategories } from '@/types/quotes';
 import type { AddNewQuoteState, NewQuoteInput } from '@/types/quotes';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+
 
 const initialState: AddNewQuoteState = { success: false };
 
@@ -34,7 +35,7 @@ export function NewQuoteForm() {
     const result = await addNewQuote(previousState, formData);
 
     if (result.success && result.data) {
-      addQuote(result.data.quote, result.data.author);
+      addQuote(result.data.quote, result.data.author, result.data.category);
       router.push('/');
     }
 
@@ -60,6 +61,7 @@ export function NewQuoteForm() {
   function onValid(values: NewQuoteInput) {
     const formData = new FormData();
     formData.append('author', values.author);
+    formData.append('category', values.category);
     formData.append('quote', values.quote);
     startTransition(() => formAction(formData));
   }
@@ -70,6 +72,9 @@ export function NewQuoteForm() {
   const quoteErrors = errors.quote
     ? [errors.quote]
     : state.errors?.fieldErrors.quote?.map((message) => ({ message }));
+    const categoryErrors = errors.category
+  ? [errors.category]
+  : state.errors?.fieldErrors.category?.map((message) => ({ message }));
 
   if (isLoading) {
     return <p className='text-foreground'>Loading...</p>;
@@ -123,7 +128,23 @@ export function NewQuoteForm() {
               />
               {authorErrors && <FieldError errors={authorErrors} />}
             </Field>
-
+            <Field data-invalid={!!categoryErrors}>
+  <FieldLabel htmlFor='category'>Category</FieldLabel>
+  <select
+    id='category'
+    aria-invalid={!!categoryErrors}
+    className='h-8 w-full rounded-lg border border-input bg-background px-2.5 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive'
+    {...register('category')}
+  >
+    <option value=''>Select a category</option>
+    {quoteCategories.map((category) => (
+      <option key={category} value={category}>
+        {category}
+      </option>
+    ))}
+  </select>
+  {categoryErrors && <FieldError errors={categoryErrors} />}
+</Field>
             <Field orientation='horizontal'>
               <Button type='submit' disabled={isPending}>
                 {isPending ? 'Adding...' : 'Add quote'}

@@ -4,9 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { H3 } from '@/components/typography/H3';
 
+
 type QuoteCardProps = {
   quote: string;
   author: string;
+  category?: string;
   likeCount: number;
   isLiked: boolean;
   likeDisabled: boolean;
@@ -18,6 +20,7 @@ export function QuoteCard({
   quote,
   author,
   likeCount,
+  category,
   isLiked,
   likeDisabled,
   onLike,
@@ -26,6 +29,11 @@ export function QuoteCard({
   return (
     <Card className='w-full max-w-xl'>
       <CardContent className='flex flex-col gap-4'>
+        {category && (
+  <span className='self-start rounded-full border px-2.5 py-0.5 text-xs font-semibold text-foreground'>
+    {category}
+  </span>
+)}
         <H3 element='p'>{quote}</H3>
         <span className='self-end font-semibold text-foreground'>
           - {author}

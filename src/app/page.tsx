@@ -16,7 +16,7 @@ export default function Home() {
     likeQuote,
     unlikeQuote,
   } = useQuotes();
-  const { quote, author, likedBy } = quotes[quoteIndex];
+const { quote, author, likedBy, category } = quotes[quoteIndex];
 
   const isLiked = !!user && likedBy.includes(user.sub);
 
@@ -39,6 +39,7 @@ export default function Home() {
         isLiked={isLiked}
         likeDisabled={!user}
         onLike={handleLike}
+        category={category}
       >
         <div className='flex flex-wrap gap-3'>
           <Button variant='secondary' onClick={previousQuote}>
