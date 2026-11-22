@@ -2,41 +2,8 @@
 
 import { z } from 'zod';
 import { auth0 } from '@/lib/auth0';
-
-export type AddNewQuoteState = {
-  success: boolean;
-  errors?: {
-    formErrors: string[];
-    fieldErrors: {
-      author?: string[];
-      quote?: string[];
-    };
-  };
-  message?: string;
-  data?: {
-    author: string;
-    quote: string;
-  };
-};
-
-const NewQuote = z.object({
-  author: z
-    .string()
-    .trim()
-    .min(2, { message: 'Author name should be at least 2 characters long' })
-    .max(50, {
-      message:
-        'Author name should be 50 characters long maximum. Please try a shorter name.',
-    }),
-  quote: z
-    .string()
-    .trim()
-    .min(5, { message: 'Quote should be at least 5 characters long' })
-    .max(300, {
-      message:
-        'Quote should be 300 characters long maximum. Please try a shorter one.',
-    }),
-});
+import { newQuoteSchema } from '@/types/quotes';
+import type { AddNewQuoteState } from '@/types/quotes';
 
 export async function addNewQuote(
   _currentState: AddNewQuoteState,
@@ -56,7 +23,7 @@ export async function addNewQuote(
     quote: String(formData.get('quote') ?? ''),
   };
 
-  const validationOutput = NewQuote.safeParse(rawData);
+  const validationOutput = newQuoteSchema.safeParse(rawData);
 
   if (!validationOutput.success) {
     return {
@@ -66,6 +33,7 @@ export async function addNewQuote(
     };
   }
 
+ 
   return {
     success: true,
     data: validationOutput.data,

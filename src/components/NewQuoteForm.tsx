@@ -3,7 +3,7 @@
 import { useActionState } from 'react';
 import { useRouter } from 'next/navigation';
 import { addNewQuote } from '@/app/user/quotes/new/actions';
-import type { AddNewQuoteState } from '@/app/user/quotes/new/actions';
+import type { AddNewQuoteState } from '@/types/quotes';
 import { useQuotes } from '@/app/QuotesContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
