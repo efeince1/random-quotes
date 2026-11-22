@@ -12,6 +12,7 @@ type QuotesContextType = {
   previousQuote: () => void;
   likeQuote: (index: number, userId: string) => void;
 unlikeQuote: (index: number, userId: string) => void;
+addQuote: (quote: string, author: string) => void;
 };
 
 const QuotesContext = createContext<QuotesContextType | null>(null);
@@ -47,6 +48,10 @@ function unlikeQuote(index: number, userId: string) {
     )
   );
 }
+function addQuote(quote: string, author: string) {
+  setQuotes([...quotes, { quote, author, likedBy: [] }]);
+  setQuoteIndex(quotes.length);
+}
 
   return (
     <QuotesContext.Provider
@@ -57,6 +62,7 @@ function unlikeQuote(index: number, userId: string) {
         previousQuote,
         likeQuote,
         unlikeQuote,
+        addQuote,
       }}
     >
       {children}
