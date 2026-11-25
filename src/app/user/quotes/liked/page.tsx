@@ -1,9 +1,11 @@
 'use client';
 
-import Link from 'next/link';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useQuotes } from '@/app/QuotesContext';
 import { LikedQuoteCard } from '@/components/LikedQuoteCard';
+import { H1 } from '@/components/typography/H1';
+import { P } from '@/components/typography/P';
+import { TextLink } from '@/components/typography/TextLink';
 
 export default function LikedQuotesPage() {
   const { user, isLoading } = useUser();
@@ -12,7 +14,7 @@ export default function LikedQuotesPage() {
   if (isLoading) {
     return (
       <main className='min-h-screen bg-background px-4 pt-20 flex justify-center'>
-        <p className='text-foreground'>Loading...</p>
+        <P>Loading...</P>
       </main>
     );
   }
@@ -20,18 +22,9 @@ export default function LikedQuotesPage() {
   if (!user) {
     return (
       <main className='min-h-screen bg-background px-4 pt-20 flex flex-col items-center gap-4'>
-        <h1 className='text-3xl font-semibold text-foreground'>
-          Liked Quotes
-        </h1>
-        <p className='text-foreground'>
-          Please log in to see the quotes you liked.
-        </p>
-        <a
-          href='/auth/login?returnTo=/user/quotes/liked'
-          className='font-semibold text-foreground underline underline-offset-4'
-        >
-          Log in
-        </a>
+        <H1>Liked Quotes</H1>
+        <P>Please log in to see the quotes you liked.</P>
+        <TextLink href='/auth/login'>Log in</TextLink>
       </main>
     );
   }
@@ -42,10 +35,10 @@ export default function LikedQuotesPage() {
 
   return (
     <main className='min-h-screen bg-background px-4 pt-20 pb-10 sm:px-10 flex flex-col items-center gap-6'>
-      <h1 className='text-3xl font-semibold text-foreground'>Liked Quotes</h1>
+      <H1>Liked Quotes</H1>
 
       {likedQuotes.length === 0 ? (
-        <p className='text-foreground'>You have not liked any quotes yet.</p>
+        <P>You have not liked any quotes yet.</P>
       ) : (
         <ul className='flex flex-col gap-4 w-full max-w-xl'>
           {likedQuotes.map((q) => (
@@ -60,12 +53,7 @@ export default function LikedQuotesPage() {
         </ul>
       )}
 
-      <Link
-        href='/'
-        className='font-semibold text-foreground underline underline-offset-4'
-      >
-        Back to quotes
-      </Link>
+      <TextLink href='/'>Back to quotes</TextLink>
     </main>
   );
 }

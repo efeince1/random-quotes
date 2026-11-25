@@ -1,9 +1,11 @@
 'use client';
 
-import Link from 'next/link';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { Button } from '@/components/ui/button';
 import { QuoteCard } from '@/components/QuoteCard';
+import { H1 } from '@/components/typography/H1';
+import { P } from '@/components/typography/P';
+import { TextLink } from '@/components/typography/TextLink';
 import { useQuotes } from '@/app/QuotesContext';
 
 export default function Home() {
@@ -16,7 +18,7 @@ export default function Home() {
     likeQuote,
     unlikeQuote,
   } = useQuotes();
-const { quote, author, likedBy, category } = quotes[quoteIndex];
+  const { quote, author, likedBy, category } = quotes[quoteIndex];
 
   const isLiked = !!user && likedBy.includes(user.sub);
 
@@ -31,15 +33,15 @@ const { quote, author, likedBy, category } = quotes[quoteIndex];
 
   return (
     <main className='min-h-screen flex flex-col items-center justify-center gap-6 bg-background px-4 py-20'>
-      <h1 className='sr-only'>Random Quotes</h1>
+      <H1 className='sr-only'>Random Quotes</H1>
       <QuoteCard
         quote={quote}
         author={author}
+        category={category}
         likeCount={likedBy.length}
         isLiked={isLiked}
         likeDisabled={!user}
         onLike={handleLike}
-        category={category}
       >
         <div className='flex flex-wrap gap-3'>
           <Button variant='secondary' onClick={previousQuote}>
@@ -50,25 +52,12 @@ const { quote, author, likedBy, category } = quotes[quoteIndex];
       </QuoteCard>
 
       {!isLoading && !user && (
-        <p className='text-foreground'>
-          <a
-            href='/auth/login'
-            className='font-semibold underline underline-offset-4'
-          >
-            Log in
-          </a>{' '}
-          to like quotes.
-        </p>
+        <P>
+          <TextLink href='/auth/login'>Log in</TextLink> to like quotes.
+        </P>
       )}
 
-      {user && (
-        <Link
-          href='/user/quotes/liked'
-          className='font-semibold text-foreground underline underline-offset-4'
-        >
-          View liked quotes
-        </Link>
-      )}
+      {user && <TextLink href='/user/quotes/liked'>View liked quotes</TextLink>}
     </main>
   );
 }

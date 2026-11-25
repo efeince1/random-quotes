@@ -20,36 +20,41 @@ export function QuotesProvider({ children }: { children: ReactNode }) {
   const [quotes, setQuotes] = useState<Quote[]>(initialQuotes);
   const [quoteIndex, setQuoteIndex] = useState(0);
 
-  function nextQuote() {
-    setQuoteIndex((quoteIndex + 1) % quotes.length);
-  }
+function nextQuote() {
+  setQuoteIndex((currentIndex) => (currentIndex + 1) % quotes.length);
+}
 
-  function previousQuote() {
-    setQuoteIndex((quoteIndex - 1 + quotes.length) % quotes.length);
-  }
+function previousQuote() {
+  setQuoteIndex(
+    (currentIndex) => (currentIndex - 1 + quotes.length) % quotes.length,
+  );
+}
 
-  function likeQuote(index: number, userId: string) {
-  setQuotes(
-    quotes.map((q, i) =>
+function likeQuote(index: number, userId: string) {
+  setQuotes((currentQuotes) =>
+    currentQuotes.map((q, i) =>
       i === index && !q.likedBy.includes(userId)
         ? { ...q, likedBy: [...q.likedBy, userId] }
-        : q
-    )
+        : q,
+    ),
   );
 }
 
 function unlikeQuote(index: number, userId: string) {
-  setQuotes(
-    quotes.map((q, i) =>
+  setQuotes((currentQuotes) =>
+    currentQuotes.map((q, i) =>
       i === index
         ? { ...q, likedBy: q.likedBy.filter((id) => id !== userId) }
-        : q
-    )
+        : q,
+    ),
   );
 }
+
 function addQuote(quote: string, author: string, category?: string) {
-  setQuotes([...quotes, { quote, author, category, likedBy: [] }]);
-  setQuoteIndex(quotes.length);
+  setQuotes((currentQuotes) => {
+    setQuoteIndex(currentQuotes.length);
+    return [...currentQuotes, { quote, author, category, likedBy: [] }];
+  });
 }
   return (
     <QuotesContext.Provider
