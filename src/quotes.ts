@@ -2,6 +2,7 @@ export type Quote = {
   quote: string;
   author: string;
   likedBy: string[];
+  category?: string;
 };
 
 export const quotes: Quote[] = [
