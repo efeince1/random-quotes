@@ -1,0 +1,42 @@
+import { MongoClient } from 'mongodb';
+import { quotes } from './quotes-seed-data';
+
+async function main() {
+  const uri = process.env.MONGODB_URI;
+  const dbName = process.env.MONGODB_DB ?? 'random-quotes';
+
+  if (!uri) {
+    throw new Error('Missing MONGODB_URI. Run with: npm run seed');
+  }
+
+  const client = new MongoClient(uri);
+
+  try {
+    await client.connect();
+    const collection = client.db(dbName).collection('quotes');
+
+    const alreadySeeded = await collection.countDocuments({ createdBy: null });
+    if (alreadySeeded > 0) {
+      console.log(`Found ${alreadySeeded} seeded quotes. Nothing inserted.`);
+      return;
+    }
+
+    const documents = quotes.map(({ quote, author }) => ({
+      quote,
+      author,
+      likedBy: [] as string[],
+      createdBy: null as string | null,
+      createdAt: new Date(),
+    }));
+
+    const result = await collection.insertMany(documents);
+    console.log(`Inserted ${result.insertedCount} quotes.`);
+  } finally {
+    await client.close();
+  }
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});

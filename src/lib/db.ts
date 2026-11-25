@@ -1,4 +1,9 @@
 import { MongoClient } from 'mongodb';
+import type { Db } from 'mongodb';
+
+export enum Collections {
+  quotes = 'quotes',
+}
 
 const globalForMongo = globalThis as unknown as {
   _mongoClient?: Promise<MongoClient>;
@@ -18,7 +23,7 @@ function getClient() {
   return globalForMongo._mongoClient;
 }
 
-export async function getDb() {
+export async function getDb(): Promise<Db> {
   const client = await getClient();
   return client.db(process.env.MONGODB_DB ?? 'random-quotes');
 }
