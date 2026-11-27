@@ -1,6 +1,9 @@
 import { QuoteForm } from '@/components/QuoteForm';
 import { H1 } from '@/components/typography/H1';
 import { addNewQuote } from './actions';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: 'Add a new quote' };
 
 export default function NewQuotePage() {
   return (

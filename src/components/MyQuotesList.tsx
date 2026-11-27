@@ -7,6 +7,7 @@ import { P } from '@/components/typography/P';
 import { TextLink } from '@/components/typography/TextLink';
 import { deleteQuoteAction } from '@/app/actions';
 import type { Quote } from '@/types/quotes';
+import { toast } from 'sonner';
 
 export function MyQuotesList({ quotes }: { quotes: Quote[] }) {
   const [isPending, startTransition] = useTransition();
@@ -21,16 +22,19 @@ export function MyQuotesList({ quotes }: { quotes: Quote[] }) {
     );
   }
 
-  function handleDelete(id: string) {
-    if (!window.confirm('Delete this quote? This cannot be undone.')) return;
+ function handleDelete(id: string) {
+  if (!window.confirm('Delete this quote? This cannot be undone.')) return;
 
-    startTransition(async () => {
-      const result = await deleteQuoteAction(id);
-      setMessage(
-        result.success ? null : (result.message ?? 'Could not delete.'),
-      );
-    });
-  }
+  startTransition(async () => {
+    const result = await deleteQuoteAction(id);
+    if (result.success) {
+      setMessage(null);
+      toast.success('Quote deleted.');
+    } else {
+      setMessage(result.message ?? 'Could not delete.');
+    }
+  });
+}
 
   return (
     <div className='flex w-full max-w-xl flex-col gap-4'>

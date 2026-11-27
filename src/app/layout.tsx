@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { Navbar } from '@/components/Navbar'; 
+import { Toaster } from '@/components/ui/sonner';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -16,7 +17,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Random Quotes',
+  title: {
+    default: 'Random Quotes',
+    template: '%s | Random Quotes',
+  },
   description: 'Browse random quotes, like them and see your liked quotes.',
 };
 
@@ -31,6 +35,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
   <Navbar />
   {children}
+  <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
+  <Navbar />
+  {children}
+  <Toaster />
+</ThemeProvider>
 </ThemeProvider>
       </body>
     </html>

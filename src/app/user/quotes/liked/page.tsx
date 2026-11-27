@@ -6,6 +6,9 @@ import { LikedQuotesList } from '@/components/LikedQuotesList';
 import { H1 } from '@/components/typography/H1';
 import { P } from '@/components/typography/P';
 import { TextLink } from '@/components/typography/TextLink';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: 'Liked quotes' };
 
 async function LikedQuotes() {
   await connection();

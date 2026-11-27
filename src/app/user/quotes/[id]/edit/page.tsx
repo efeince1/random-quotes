@@ -8,6 +8,9 @@ import { H1 } from '@/components/typography/H1';
 import { P } from '@/components/typography/P';
 import { TextLink } from '@/components/typography/TextLink';
 import { updateQuoteAction } from './actions';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: 'Edit quote' };
 
 async function EditQuote({ params }: { params: Promise<{ id: string }> }) {
   await connection();

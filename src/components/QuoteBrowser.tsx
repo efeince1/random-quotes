@@ -10,6 +10,7 @@ import { deleteQuoteAction, setQuoteLike } from '@/app/actions';
 import { randomIndex } from '@/lib/random';
 import { quoteCategories } from '@/types/quotes';
 import type { Quote } from '@/types/quotes';
+import { toast } from 'sonner';
 
 type QuoteBrowserProps = {
   quotes: Quote[];
@@ -51,22 +52,28 @@ export function QuoteBrowser({
   const isOwner = userId !== null && createdBy === userId;
 
   function handleLike() {
-    if (!userId) return;
-    startTransition(async () => {
-      await setQuoteLike(id, !isLiked);
-    });
-  }
+  if (!userId) return;
+  startTransition(async () => {
+    const result = await setQuoteLike(id, !isLiked);
+    if (!result.success) {
+      toast.error(result.message ?? 'Could not update your like.');
+    }
+  });
+}
 
-  function handleDelete() {
-    if (!window.confirm('Delete this quote? This cannot be undone.')) return;
+function handleDelete() {
+  if (!window.confirm('Delete this quote? This cannot be undone.')) return;
 
-    startTransition(async () => {
-      const result = await deleteQuoteAction(id);
-      setMessage(
-        result.success ? null : (result.message ?? 'Could not delete.'),
-      );
-    });
-  }
+  startTransition(async () => {
+    const result = await deleteQuoteAction(id);
+    if (result.success) {
+      setMessage(null);
+      toast.success('Quote deleted.');
+    } else {
+      setMessage(result.message ?? 'Could not delete.');
+    }
+  });
+}
 
   function handlePrevious() {
     setMessage(null);
