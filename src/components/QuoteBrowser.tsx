@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import { QuoteCard } from '@/components/QuoteCard';
 import { P } from '@/components/typography/P';
 import { TextLink } from '@/components/typography/TextLink';
-import { setQuoteLike } from '@/app/actions';
 import type { Quote } from '@/types/quotes';
+import { deleteQuoteAction, setQuoteLike } from '@/app/actions';
 
 type QuoteBrowserProps = {
   quotes: Quote[];
@@ -16,6 +16,7 @@ type QuoteBrowserProps = {
 export function QuoteBrowser({ quotes, userId }: QuoteBrowserProps) {
   const [index, setIndex] = useState(0);
   const [isPending, startTransition] = useTransition();
+  const [message, setMessage] = useState<string | null>(null);
 
   if (quotes.length === 0) {
     return <P>There are no quotes yet.</P>;
@@ -33,7 +34,14 @@ const { id, quote, author, category, likedBy, createdBy } =
       await setQuoteLike(id, !isLiked);
     });
   }
+function handleDelete() {
+  if (!window.confirm('Delete this quote? This cannot be undone.')) return;
 
+  startTransition(async () => {
+    const result = await deleteQuoteAction(id);
+    setMessage(result.success ? null : (result.message ?? 'Could not delete.'));
+  });
+}
   return (
     <>
       <QuoteCard
@@ -62,8 +70,22 @@ const { id, quote, author, category, likedBy, createdBy } =
     </Button>
   </div>
   {isOwner && (
+  <div className='flex flex-wrap items-center gap-4'>
     <TextLink href={`/user/quotes/${id}/edit`}>Edit this quote</TextLink>
-  )}
+    <Button
+      variant='outline'
+      onClick={handleDelete}
+      disabled={isPending}
+    >
+      Delete this quote
+    </Button>
+  </div>
+)}
+{message && (
+  <p role='alert' className='text-sm font-semibold text-destructive'>
+    {message}
+  </p>
+)}
 </div>
       </QuoteCard>
 
