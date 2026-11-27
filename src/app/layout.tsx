@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { Suspense } from 'react';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { Navbar } from '@/components/Navbar'; 
+import { Navbar } from '@/components/Navbar';
 import { Toaster } from '@/components/ui/sonner';
 
 const geistSans = Geist({
@@ -33,14 +34,16 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     >
       <body className='min-h-full flex flex-col'>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-  <Navbar />
-  {children}
-  <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-  <Navbar />
-  {children}
-  <Toaster />
-</ThemeProvider>
-</ThemeProvider>
+          <Suspense
+            fallback={
+              <header className='fixed inset-x-0 top-0 z-10 h-14 border-b bg-background/90' />
+            }
+          >
+            <Navbar />
+          </Suspense>
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );
