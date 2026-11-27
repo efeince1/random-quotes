@@ -21,6 +21,7 @@ export async function setQuoteLike(quoteId: string, liked: boolean) {
 
   revalidatePath('/');
   revalidatePath('/user/quotes/liked');
+  revalidatePath('/user/quotes/mine');
 
   return { success: true };
 }
@@ -53,6 +54,7 @@ export async function deleteQuoteAction(
 
   revalidatePath('/');
   revalidatePath('/user/quotes/liked');
+  revalidatePath('/user/quotes/mine');
 
   return { success: true };
 }

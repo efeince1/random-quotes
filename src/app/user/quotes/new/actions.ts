@@ -48,5 +48,6 @@ export async function addNewQuote(
   }
 
   revalidatePath('/');
+  revalidatePath('/user/quotes/mine');
   redirect('/user/quotes/new/success');
 }

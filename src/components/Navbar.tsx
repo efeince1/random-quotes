@@ -25,6 +25,9 @@ export function Navbar() {
     <Link href='/user/quotes/new' className={linkStyles}>
       New quote
     </Link>
+    <Link href='/user/quotes/mine' className={linkStyles}>
+  My quotes
+</Link>
     <Link href='/user/quotes/liked' className={linkStyles}>
       Liked quotes
     </Link>

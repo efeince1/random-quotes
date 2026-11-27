@@ -52,7 +52,7 @@ export default function EditQuotePage({
       <Suspense fallback={<P>Loading...</P>}>
         <EditQuote params={params} />
       </Suspense>
-      <TextLink href='/'>Back to quotes</TextLink>
+      <TextLink href='/user/quotes/mine'>Back to my quotes</TextLink>
     </main>
   );
 }
