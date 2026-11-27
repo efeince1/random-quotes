@@ -22,8 +22,10 @@ export function QuoteBrowser({ quotes, userId }: QuoteBrowserProps) {
   }
 
   const currentIndex = Math.min(index, quotes.length - 1);
-  const { id, quote, author, category, likedBy } = quotes[currentIndex];
-  const isLiked = userId !== null && likedBy.includes(userId);
+const { id, quote, author, category, likedBy, createdBy } =
+  quotes[currentIndex];
+    const isLiked = userId !== null && likedBy.includes(userId);
+    const isOwner = userId !== null && createdBy === userId;
 
   function handleLike() {
     if (!userId) return;
@@ -43,19 +45,26 @@ export function QuoteBrowser({ quotes, userId }: QuoteBrowserProps) {
         likeDisabled={!userId || isPending}
         onLike={handleLike}
       >
-        <div className='flex flex-wrap gap-3'>
-          <Button
-            variant='secondary'
-            onClick={() =>
-              setIndex((current) => (current - 1 + quotes.length) % quotes.length)
-            }
-          >
-            Previous
-          </Button>
-          <Button onClick={() => setIndex((current) => (current + 1) % quotes.length)}>
-            Next Quote
-          </Button>
-        </div>
+        <div className='flex w-full flex-col gap-3'>
+  <div className='flex flex-wrap gap-3'>
+    <Button
+      variant='secondary'
+      onClick={() =>
+        setIndex((current) => (current - 1 + quotes.length) % quotes.length)
+      }
+    >
+      Previous
+    </Button>
+    <Button
+      onClick={() => setIndex((current) => (current + 1) % quotes.length)}
+    >
+      Next Quote
+    </Button>
+  </div>
+  {isOwner && (
+    <TextLink href={`/user/quotes/${id}/edit`}>Edit this quote</TextLink>
+  )}
+</div>
       </QuoteCard>
 
       {userId ? (

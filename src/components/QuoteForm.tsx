@@ -3,7 +3,6 @@
 import { startTransition, useActionState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { addNewQuote } from '@/app/user/quotes/new/actions';
 import { newQuoteSchema, quoteCategories } from '@/types/quotes';
 import type { AddNewQuoteState, NewQuoteInput } from '@/types/quotes';
 import { Button } from '@/components/ui/button';
@@ -17,13 +16,27 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
+type QuoteFormProps = {
+  action: (
+    state: AddNewQuoteState,
+    formData: FormData,
+  ) => Promise<AddNewQuoteState>;
+  initialValues?: { quote: string; author: string; category?: string };
+  submitLabel: string;
+  pendingLabel: string;
+  resetLabel?: string;
+};
+
 const initialState: AddNewQuoteState = { success: false };
 
-export function NewQuoteForm() {
-  const [state, formAction, isPending] = useActionState(
-    addNewQuote,
-    initialState,
-  );
+export function QuoteForm({
+  action,
+  initialValues,
+  submitLabel,
+  pendingLabel,
+  resetLabel = 'Clear',
+}: QuoteFormProps) {
+  const [state, formAction, isPending] = useActionState(action, initialState);
 
   const {
     register,
@@ -33,7 +46,13 @@ export function NewQuoteForm() {
   } = useForm<NewQuoteInput>({
     mode: 'onBlur',
     resolver: zodResolver(newQuoteSchema),
-    defaultValues: { author: '', quote: '' },
+    defaultValues: {
+      author: initialValues?.author ?? '',
+      quote: initialValues?.quote ?? '',
+      category: quoteCategories.find(
+        (category) => category === initialValues?.category,
+      ),
+    },
   });
 
   function onValid(values: NewQuoteInput) {
@@ -77,7 +96,7 @@ export function NewQuoteForm() {
               <Textarea
                 id='quote'
                 rows={4}
-                defaultValue={state.data?.quote}
+                defaultValue={state.data?.quote ?? initialValues?.quote}
                 aria-invalid={!!quoteErrors}
                 {...register('quote')}
               />
@@ -88,7 +107,7 @@ export function NewQuoteForm() {
               <FieldLabel htmlFor='author'>Author</FieldLabel>
               <Input
                 id='author'
-                defaultValue={state.data?.author}
+                defaultValue={state.data?.author ?? initialValues?.author}
                 aria-invalid={!!authorErrors}
                 {...register('author')}
               />
@@ -99,7 +118,9 @@ export function NewQuoteForm() {
               <FieldLabel htmlFor='category'>Category</FieldLabel>
               <select
                 id='category'
-                defaultValue={state.data?.category ?? ''}
+                defaultValue={
+                  state.data?.category ?? initialValues?.category ?? ''
+                }
                 aria-invalid={!!categoryErrors}
                 className='h-8 w-full rounded-lg border border-input bg-background px-2.5 text-sm text-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 aria-invalid:border-destructive'
                 {...register('category')}
@@ -116,10 +137,10 @@ export function NewQuoteForm() {
 
             <Field orientation='horizontal'>
               <Button type='submit' disabled={isPending}>
-                {isPending ? 'Adding...' : 'Add quote'}
+                {isPending ? pendingLabel : submitLabel}
               </Button>
               <Button type='button' variant='outline' onClick={() => reset()}>
-                Clear
+                {resetLabel}
               </Button>
             </Field>
           </FieldGroup>
