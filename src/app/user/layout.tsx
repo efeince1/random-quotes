@@ -17,7 +17,7 @@ export default function UserLayout({ children }: { children: ReactNode }) {
   return (
     <Suspense
       fallback={
-        <main className='min-h-screen bg-background px-4 pt-20 flex justify-center'>
+        <main className='min-h-dvh bg-background px-4 pt-20 flex justify-center'>
           <p className='text-foreground'>Loading...</p>
         </main>
       }

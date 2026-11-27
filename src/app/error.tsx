@@ -27,7 +27,7 @@ export default function ErrorPage({
   }
 
   return (
-    <main className='min-h-screen bg-background px-4 pt-20 pb-10 flex flex-col items-center gap-6 text-center'>
+    <main className='min-h-dvh bg-background px-4 pt-20 pb-10 flex flex-col items-center gap-6 text-center'>
       <H1>Something went wrong</H1>
       <P>
         We could not load this page. Please check your connection and try

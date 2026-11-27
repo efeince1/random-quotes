@@ -6,7 +6,7 @@ type H3Props = {
 };
 
 export function H3({ element = 'h3', children }: H3Props) {
-  const styles = 'text-xl sm:text-2xl font-semibold text-foreground';
+  const styles = 'text-xl sm:text-2xl font-semibold text-foreground break-words';
 
   switch (element) {
     case 'p':

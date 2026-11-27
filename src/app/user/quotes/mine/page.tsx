@@ -31,7 +31,7 @@ async function MyQuotes() {
 
 export default function MyQuotesPage() {
   return (
-    <main className='min-h-screen bg-background px-4 pt-20 pb-10 sm:px-10 flex flex-col items-center gap-6'>
+    <main className='min-h-dvh bg-background px-4 pt-20 pb-10 sm:px-10 flex flex-col items-center gap-6'>
       <H1>My quotes</H1>
       <Suspense fallback={<P>Loading...</P>}>
         <MyQuotes />

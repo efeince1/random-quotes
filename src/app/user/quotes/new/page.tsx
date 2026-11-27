@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: 'Add a new quote' };
 
 export default function NewQuotePage() {
   return (
-    <main className='min-h-screen bg-background px-4 pt-20 pb-10 flex flex-col items-center gap-6'>
+    <main className='min-h-dvh bg-background px-4 pt-20 pb-10 flex flex-col items-center gap-6'>
       <H1>Add a new quote</H1>
       <QuoteForm
         action={addNewQuote}

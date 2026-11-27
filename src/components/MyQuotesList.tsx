@@ -54,8 +54,8 @@ export function MyQuotesList({ quotes }: { quotes: Quote[] }) {
                     {q.category}
                   </span>
                 )}
-                <p className='text-lg font-semibold text-foreground'>
-                  {q.quote}
+                <p className='text-lg font-semibold text-foreground break-words'>
+                     {q.quote}
                 </p>
                 <span className='self-end font-semibold text-foreground'>
                   - {q.author}

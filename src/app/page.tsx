@@ -28,7 +28,7 @@ async function Quotes() {
 
 export default function Home() {
   return (
-    <main className='min-h-screen flex flex-col items-center justify-center gap-6 bg-background px-4 py-20'>
+    <main className='min-h-dvh flex flex-col items-center justify-center gap-6 bg-background px-4 py-20'>
       <H1 className='sr-only'>Random Quotes</H1>
       <Suspense fallback={<P>Loading quotes...</P>}>
         <Quotes />

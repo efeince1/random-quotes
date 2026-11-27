@@ -7,7 +7,7 @@ export const metadata: Metadata = { title: 'Quote added' };
 
 export default function NewQuoteSuccessPage() {
   return (
-    <main className='min-h-screen bg-background px-4 pt-20 pb-10 flex flex-col items-center gap-6 text-center'>
+    <main className='min-h-dvh bg-background px-4 pt-20 pb-10 flex flex-col items-center gap-6 text-center'>
       <H1>Thank you!</H1>
       <P>Your quote was added.</P>
       <div className='flex flex-wrap justify-center gap-6'>

@@ -50,7 +50,7 @@ export default function EditQuotePage({
   params: Promise<{ id: string }>;
 }) {
   return (
-    <main className='min-h-screen bg-background px-4 pt-20 pb-10 flex flex-col items-center gap-6'>
+    <main className='min-h-dvh bg-background px-4 pt-20 pb-10 flex flex-col items-center gap-6'>
       <H1>Edit quote</H1>
       <Suspense fallback={<P>Loading...</P>}>
         <EditQuote params={params} />
