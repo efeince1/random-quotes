@@ -5,6 +5,7 @@ import { QuoteBrowser } from '@/components/QuoteBrowser';
 import { H1 } from '@/components/typography/H1';
 import { P } from '@/components/typography/P';
 import { connection } from 'next/server';
+import { randomIndex } from '@/lib/random';
 
 async function Quotes() {
   await connection();
@@ -14,7 +15,15 @@ async function Quotes() {
     auth0.getSession(),
   ]);
 
-  return <QuoteBrowser quotes={quotes} userId={session?.user.sub ?? null} />;
+  const initialIndex = randomIndex(quotes.length);
+
+  return (
+    <QuoteBrowser
+      quotes={quotes}
+      userId={session?.user.sub ?? null}
+      initialIndex={initialIndex}
+    />
+  );
 }
 
 export default function Home() {
