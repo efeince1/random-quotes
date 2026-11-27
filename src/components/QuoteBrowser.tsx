@@ -11,6 +11,7 @@ import { randomIndex } from '@/lib/random';
 import { quoteCategories } from '@/types/quotes';
 import type { Quote } from '@/types/quotes';
 import { toast } from 'sonner';
+import { CopyQuoteButton } from '@/components/CopyQuoteButton';
 
 type QuoteBrowserProps = {
   quotes: Quote[];
@@ -141,6 +142,7 @@ function handleDelete() {
         isLiked={isLiked}
         likeDisabled={!userId || isPending}
         onLike={handleLike}
+        extraActions={<CopyQuoteButton quote={quote} author={author} />}
       >
         <div className='flex w-full flex-col gap-3'>
           <div className='flex flex-wrap gap-3'>

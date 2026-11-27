@@ -14,6 +14,7 @@ type QuoteCardProps = {
   likeDisabled: boolean;
   onLike: () => void;
   children: ReactNode;
+  extraActions?: ReactNode;
 };
 
 export function QuoteCard({
@@ -25,6 +26,7 @@ export function QuoteCard({
   likeDisabled,
   onLike,
   children,
+  extraActions,
 }: QuoteCardProps) {
   return (
     <Card className='w-full max-w-xl'>
@@ -38,20 +40,19 @@ export function QuoteCard({
         <span className='self-end font-semibold text-foreground'>
           - {author}
         </span>
-        <div className='flex items-center gap-3'>
-          <Button
-            variant='outline'
-            onClick={onLike}
-            disabled={likeDisabled}
-            aria-pressed={isLiked}
-          >
-            <Heart className={isLiked ? 'fill-current' : ''} />
-            Like
-          </Button>
-          <span className='font-semibold text-foreground'>
-            {likeCount} likes
-          </span>
-        </div>
+        <div className='flex flex-wrap items-center gap-3'>
+  <Button
+    variant='outline'
+    onClick={onLike}
+    disabled={likeDisabled}
+    aria-pressed={isLiked}
+  >
+    <Heart className={isLiked ? 'fill-current' : ''} />
+    Like
+  </Button>
+  <span className='font-semibold text-foreground'>{likeCount} likes</span>
+  {extraActions}
+</div>
       </CardContent>
       <CardFooter>{children}</CardFooter>
     </Card>
