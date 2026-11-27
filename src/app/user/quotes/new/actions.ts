@@ -1,7 +1,10 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { auth0 } from '@/lib/auth0';
+import { createQuote } from '@/lib/quotes-db';
 import { newQuoteSchema } from '@/types/quotes';
 import type { AddNewQuoteState } from '@/types/quotes';
 
@@ -19,10 +22,10 @@ export async function addNewQuote(
   }
 
   const rawData = {
-  author: String(formData.get('author') ?? ''),
-  quote: String(formData.get('quote') ?? ''),
-  category: String(formData.get('category') ?? ''),
-};
+    author: String(formData.get('author') ?? ''),
+    quote: String(formData.get('quote') ?? ''),
+    category: String(formData.get('category') ?? ''),
+  };
 
   const validationOutput = newQuoteSchema.safeParse(rawData);
 
@@ -34,9 +37,16 @@ export async function addNewQuote(
     };
   }
 
- 
-  return {
-    success: true,
-    data: validationOutput.data,
-  };
+  try {
+    await createQuote(validationOutput.data, session.user.sub);
+  } catch {
+    return {
+      success: false,
+      message: 'Something went wrong while saving your quote. Please try again.',
+      data: rawData,
+    };
+  }
+
+  revalidatePath('/');
+  redirect('/user/quotes/new/success');
 }

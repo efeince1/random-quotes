@@ -1,11 +1,9 @@
 'use client';
 
-import { startTransition, useActionState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { startTransition, useActionState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { addNewQuote } from '@/app/user/quotes/new/actions';
-import { useQuotes } from '@/app/QuotesContext';
 import { newQuoteSchema, quoteCategories } from '@/types/quotes';
 import type { AddNewQuoteState, NewQuoteInput } from '@/types/quotes';
 import { Button } from '@/components/ui/button';
@@ -22,25 +20,10 @@ import { Textarea } from '@/components/ui/textarea';
 const initialState: AddNewQuoteState = { success: false };
 
 export function NewQuoteForm() {
-  const { addQuote } = useQuotes();
-  const router = useRouter();
-
   const [state, formAction, isPending] = useActionState(
     addNewQuote,
     initialState,
   );
-
-  const handledState = useRef<AddNewQuoteState | null>(null);
-
-  useEffect(() => {
-    if (handledState.current === state) return;
-    handledState.current = state;
-
-    if (state.success && state.data) {
-      addQuote(state.data.quote, state.data.author, state.data.category);
-      router.push('/');
-    }
-  }, [state, addQuote, router]);
 
   const {
     register,
@@ -86,15 +69,6 @@ export function NewQuoteForm() {
                 className='text-sm font-semibold text-destructive'
               >
                 {state.message}
-              </p>
-            )}
-
-            {state.success && (
-              <p
-                role='status'
-                className='text-sm font-semibold text-foreground'
-              >
-                Quote added.
               </p>
             )}
 

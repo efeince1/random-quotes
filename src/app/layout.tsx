@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
-import { QuotesProvider } from '@/app/QuotesContext';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { Navbar } from '@/components/Navbar'; 
 
@@ -30,11 +29,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     >
       <body className='min-h-full flex flex-col'>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-          <QuotesProvider>
-            <Navbar />
-            {children}
-          </QuotesProvider>
-        </ThemeProvider>
+  <Navbar />
+  {children}
+</ThemeProvider>
       </body>
     </html>
   );
