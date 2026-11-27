@@ -54,6 +54,14 @@ export async function getLikedQuotes(userId: string): Promise<Quote[]> {
     .toArray();
   return documents.map(toQuote);
 }
+export async function getQuotesByCreator(userId: string): Promise<Quote[]> {
+  const collection = await getCollection();
+  const documents = await collection
+    .find({ createdBy: userId })
+    .sort({ createdAt: -1, _id: -1 })
+    .toArray();
+  return documents.map(toQuote);
+}
 
 export async function getQuoteById(id: string): Promise<Quote | null> {
   const objectId = toObjectId(id);

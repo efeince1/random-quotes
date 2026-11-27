@@ -21,7 +21,7 @@ export function LikedQuoteCard({
     <li>
       <Card>
         <CardContent className='flex flex-col gap-3'>
-          <p className='text-lg font-semibold text-foreground'>{quote}</p>
+          <p className='text-lg font-semibold text-foreground break-words'>{quote}</p>
           <span className='self-end font-semibold text-foreground'>
             - {author}
           </span>

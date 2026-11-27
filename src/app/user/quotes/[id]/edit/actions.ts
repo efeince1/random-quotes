@@ -65,4 +65,8 @@ export async function updateQuoteAction(
   revalidatePath('/');
   revalidatePath('/user/quotes/liked');
   redirect('/');
+  revalidatePath('/');
+revalidatePath('/user/quotes/liked');
+revalidatePath('/user/quotes/mine');
+redirect('/user/quotes/mine');
 }
