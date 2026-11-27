@@ -47,3 +47,11 @@ export type AddNewQuoteState = {
     category: string;
   };
 };
+export type Quote = {
+  id: string;
+  quote: string;
+  author: string;
+  category?: string;
+  likedBy: string[];
+  createdBy: string | null;
+};

@@ -6,6 +6,7 @@ type LikedQuoteCardProps = {
   quote: string;
   author: string;
   likeCount: number;
+  disabled?: boolean;
   onUnlike: () => void;
 };
 
@@ -13,6 +14,7 @@ export function LikedQuoteCard({
   quote,
   author,
   likeCount,
+  disabled, 
   onUnlike,
 }: LikedQuoteCardProps) {
   return (
@@ -24,7 +26,7 @@ export function LikedQuoteCard({
             - {author}
           </span>
           <div className='flex items-center gap-3'>
-            <Button variant='outline' onClick={onUnlike}>
+            <Button variant='outline' onClick={onUnlike} disabled={disabled}>
               <Heart className='fill-current' />
               Unlike
             </Button>

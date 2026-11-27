@@ -1,11 +1,6 @@
-export type Quote = {
-  quote: string;
-  author: string;
-  likedBy: string[];
-  category?: string;
-};
 
-export const quotes: Quote[] = [
+
+export const quotes = [
   {
     quote: "Be yourself; everyone else is already taken.",
     author: "Oscar Wilde",
